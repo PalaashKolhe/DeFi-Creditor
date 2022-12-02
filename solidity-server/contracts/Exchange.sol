@@ -28,7 +28,11 @@ contract Exchange {
         uint256 dateCreated
     );
 
-    event CreditNotFound
+    function removeFromCreditArr(uint index) internal {
+        require(index < creditArray.length);
+        creditArray[index] = creditArray[creditArray.length-1];
+        creditArray.pop();
+    }
 
     function createUser(uint256 _balance, address _address) public {
         userMapping[_address] = User(_address, _balance, false);
@@ -77,60 +81,46 @@ contract Exchange {
 
         require(borrowerUser.hasCredit == true);
 
-        Credit curr;
+        Credit credit;
         bool foundInCreditArray = false;
+        uint index = 0;
+        Credit tempCredit;
         // uint arraySize = sizeof(creditArray) / sizeof(creditArray[0]);
 
         for (uint i=0; i < creditArray.length; i++) {
-            if (creditArray[i].borrower == borrower && creditArray[i].lender == lender) {
-                curr = creditArray[i];
+            tempCredit = creditArray[i];
+            if (tempCredit.getBorrower() == borrower && tempCredit.getLender() == lender) {
+                credit = creditArray[i];
                 foundInCreditArray = true;
+                index = i;
                 break;
             }
         }
 
         require(foundInCreditArray == true);
+        require(borrowerUser.balance >= credit.getAmount());
 
-
-
-
-
-
-
-        // give every lender their money back. iterate through credit array
-        // uint bArraySize = sizeof(borrowerCredits) / sizeof(borrowerCredits[0]);
-        // uint ctr = 0;
-        // while (amount > 0 && ctr < bArraySize) {
-        //     Credit cur = borrowerCredits[ctr];
-
-        //     if (cur.cred)
-            
-        //     ctr++;
-        // }
-
-
+        transfer(borrower, lender, credit.getAmount());
+        removeFromCreditArr(index);
     }
 
     // transfer funds
     function transfer(
-        address _borrower,
-        address _lender,
+        address _sender,
+        address _receiver,
         uint256 amt
     ) private {
-        User memory borrower = userMapping[_borrower];
-        User memory lender = userMapping[_lender];
+        User memory sender = userMapping[_sender];
+        User memory receiver = userMapping[_receiver];
 
-        lender.balance -= amt;
+        receiver.balance -= amt;
 
-        borrower.balance += amt;
-        borrower.hasCredit = true;
+        sender.balance += amt;
+        sender.hasCredit = true;
 
-        userMapping[_borrower] = borrower;
-        userMapping[_lender] = lender;
+        userMapping[_sender] = sender;
+        userMapping[_receiver] = receiver;
 
-        // keep track of who borrower owes money to
-        owesMoneyTo[_borrower].push(_lender);
-
-        emit LogTransfer(_borrower, _lender, amt);
+        emit LogTransfer(_sender, _receiver, amt);
     }
 }

@@ -27,4 +27,17 @@ contract Credit {
         dateCreated = _dateCreated;
         repaymentDate = _repaymentDate;
     }
+
+    function getBorrower() public view returns(address) {
+        return borrower;
+    }
+
+    function getLender() public view returns(address) {
+        return lender;
+    }
+
+    function getAmount() public view returns(uint256) {
+        return amount;
+    }
+
 }
