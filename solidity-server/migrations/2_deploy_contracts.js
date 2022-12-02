@@ -1,5 +1,5 @@
-const Lending = artifacts.require("./Lending.sol");
+const Exchange = artifacts.require("./Exchange.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Lending);
+  deployer.deploy(Exchange);
 };
