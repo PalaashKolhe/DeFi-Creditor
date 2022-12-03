@@ -4,9 +4,7 @@
 client/node_modules
 client/.pnp
 client.pnp.js
-
-# testing
-client/coverage
+client/package-lock.json
 
 # production
 client/build
