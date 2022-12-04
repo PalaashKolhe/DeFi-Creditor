@@ -4,7 +4,7 @@ import "./Credit.sol";
 
 contract Exchange {
     struct User {
-        address _address;
+        address payable _address;
         uint256 balance;
         bool hasCredit;
     }
@@ -14,7 +14,18 @@ contract Exchange {
     mapping(address => User) userMapping;
     Credit[] creditArray;
 
-    constructor() public {}
+    constructor() public {
+        address payable user1 = 0xf1234bBF19cd46B152A5f2A86C481C10C1436B3C;
+        address payable user2 = 0x6a18f2F25c9B87988c7280E586bD1fFa979aC7C7;
+        address payable user3 = 0xDE41c87eAD1B6Bf3BDc1a5F576476a800187aa06;
+
+        createUser(100, user1);
+        createUser(50, user2);
+        createUser(75, user3);
+
+        createCredit(user1, user2, 20, 1, block.timestamp + 10000);
+        createCredit(user2, user3, 15, 2, block.timestamp + 20000);
+    }
 
     event UserCreated(address _address, uint256 balance, bool hasCredit);
 
@@ -34,13 +45,14 @@ contract Exchange {
         creditArray.pop();
     }
 
-    function createUser(uint256 _balance, address _address) public {
+    function createUser(uint256 _balance, address payable _address) public {
         userMapping[_address] = User(_address, _balance, false);
         emit UserCreated(_address, _balance, false);
     }
 
     function createUser(uint256 _balance) public {
-        userMapping[msg.sender] = User(msg.sender, _balance, false);
+        address payable sender = payable(msg.sender);
+        userMapping[msg.sender] = User(sender, _balance, false);
         emit UserCreated(msg.sender, _balance, false);
     }
 
@@ -122,5 +134,9 @@ contract Exchange {
         userMapping[_receiver] = receiver;
 
         emit LogTransfer(_sender, _receiver, amt);
+    }
+
+    function getCreditArray() public view returns(Credit[] memory) {
+        return creditArray;
     }
 }
