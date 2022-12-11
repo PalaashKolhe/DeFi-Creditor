@@ -1,9 +1,8 @@
 import { React, Component } from 'react';
-import Web3 from 'web3';
-
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 import './App.css';
 import ExchangeContract from "./contracts/Exchange.json";
+import CreditContract from "./contracts/Credit.json";
 
 class App extends Component {
   constructor(props) {
@@ -12,16 +11,32 @@ class App extends Component {
       exchange: null,
       account: null,
       creditArray: [],
+      userArray: [],
     }
   }
 
   componentDidMount() {
     this.loadSmartContract();
+
   }
 
-  async loadCredits() {
-    const credit = await this.state.exchange.functions.getCreditArray();
-    this.setState({ creditArray: credit }, () => { console.log(this.state) });
+  async loadCredits(signer) {
+    const addressArray = await this.state.exchange.functions.getCreditArray();
+    var creditArray = [];
+    addressArray[0].forEach(address => {
+      var credit = new ethers.Contract(
+        address,
+        CreditContract.abi,
+        signer
+      );
+      creditArray.push(credit);
+    });
+    this.setState({creditArray: creditArray});
+  }
+
+  async loadUsers() {
+    const users = await this.state.exchange.functions.getUsers();
+    this.setState({ userArray: users[0] });
   }
 
   async loadSmartContract() {
@@ -37,7 +52,10 @@ class App extends Component {
           signer
         )
         const accounts = await provider.listAccounts();
-        this.setState({ exchange: exchange, account: accounts[0] }, () => this.loadCredits());
+        this.setState({ exchange: exchange, account: accounts[0] }, () => {
+          this.loadCredits(signer);
+          this.loadUsers();
+        });
       } else {
         console.log("Ethereum object doesn't exist");
       }

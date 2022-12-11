@@ -1,4 +1,5 @@
 pragma solidity >=0.4.22 <0.9.0;
+pragma experimental ABIEncoderV2;
 
 import "./Credit.sol";
 
@@ -12,12 +13,13 @@ contract Exchange {
     // maps address of a user to the other addresses they owe money
     // mapping(address => address[]) owesMoneyTo;
     mapping(address => User) userMapping;
+    User[] userArray;
     Credit[] creditArray;
 
     constructor() public {
-        address payable user1 = 0xf1234bBF19cd46B152A5f2A86C481C10C1436B3C;
-        address payable user2 = 0x6a18f2F25c9B87988c7280E586bD1fFa979aC7C7;
-        address payable user3 = 0xDE41c87eAD1B6Bf3BDc1a5F576476a800187aa06;
+        address payable user1 = 0x146cfF2D2Ea61CeC81066cd3c40A9565CC70c3dA;
+        address payable user2 = 0xC54F7Bf6B56c46C53d624e1269a293AF0aEe57dd;
+        address payable user3 = 0x5d8D2f6fc8FDdF68e8961e027B2f3412cc21D751;
 
         createUser(100, user1);
         createUser(50, user2);
@@ -46,13 +48,17 @@ contract Exchange {
     }
 
     function createUser(uint256 _balance, address payable _address) public {
-        userMapping[_address] = User(_address, _balance, false);
+        User memory tempUser = User(_address, _balance, false);
+        userMapping[_address] = tempUser;
+        userArray.push(tempUser);
         emit UserCreated(_address, _balance, false);
     }
 
     function createUser(uint256 _balance) public {
         address payable sender = payable(msg.sender);
-        userMapping[msg.sender] = User(sender, _balance, false);
+        User memory tempUser = User(sender, _balance, false);
+        userMapping[msg.sender] = tempUser;
+        userArray.push(tempUser);
         emit UserCreated(msg.sender, _balance, false);
     }
 
@@ -71,7 +77,8 @@ contract Exchange {
 
         uint256 currentDate = block.timestamp;
 
-        Credit credit = new Credit(
+        Credit credit = new Credit();
+        credit.initializeCredit(
             borrower,
             lender,
             amount,
@@ -138,5 +145,9 @@ contract Exchange {
 
     function getCreditArray() public view returns(Credit[] memory) {
         return creditArray;
+    }
+
+    function getUsers() public view returns (User[] memory) {
+        return userArray;
     }
 }
