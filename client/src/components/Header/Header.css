@@ -1,0 +1,24 @@
+.header {
+    height: 10%;
+    padding: 20px 15%;
+    box-shadow: 0 0 15px 0 #ccc;
+}
+
+.title {
+    font-size: 30px;
+}
+
+.request {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 7px 15px;
+    border: 2px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to right, #14044d, #48cbd9);;
+    border-radius: 5em;
+    cursor: pointer;
+}
+
+.request:hover {
+
+}

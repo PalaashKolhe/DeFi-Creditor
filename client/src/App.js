@@ -3,6 +3,8 @@ import { ethers } from "ethers";
 import './App.css';
 import ExchangeContract from "./contracts/Exchange.json";
 import CreditContract from "./contracts/Credit.json";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LandingPage from "./components/LandingPage/LandingPage";
 
 class App extends Component {
   constructor(props) {
@@ -31,7 +33,7 @@ class App extends Component {
       );
       creditArray.push(credit);
     });
-    this.setState({creditArray: creditArray});
+    this.setState({ creditArray: creditArray });
   }
 
   async loadUsers() {
@@ -66,9 +68,18 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        hello your account is: {this.state.account} and your contract address is:
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <Routes>
+            <Route exact path="/" element={<LandingPage/>} />
+            {/* <Route path="/main" component={MainPage} exact/>
+            <Route path="/auth" component={AuthPage} exact/>
+            <Route path="/view_profile" component={ProfilePage} exact/>
+            <Route path="/confirmed" component={ConfirmOrder} exact />
+            <Route path="/view_post/:id" component={ViewPost} exact /> */}
+          </Routes>
+        </div>
+      </BrowserRouter>
     )
   }
 }
