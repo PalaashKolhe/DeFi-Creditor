@@ -1,0 +1,13 @@
+.landingPage {
+    height: 100%;
+    width: 100%;
+}
+
+.credit {
+    padding: 20px 15%;
+}
+
+.credit p {
+    font-size: 16px;
+    
+}

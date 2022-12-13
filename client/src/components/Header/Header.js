@@ -14,6 +14,7 @@ class Header extends Component {
             <div className="frbc header">
                 <div className="title frsc">
                     DeFi Creditor
+                    <img src="logo.png" width={"50px"} style={{"paddingLeft":"20px"}}/>
                 </div>
                 <div onClick={() => { console.log("hello") }} className="request frec">
                     Request to Borrow

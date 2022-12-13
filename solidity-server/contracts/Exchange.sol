@@ -17,9 +17,9 @@ contract Exchange {
     Credit[] creditArray;
 
     constructor() public {
-        address payable user1 = 0x146cfF2D2Ea61CeC81066cd3c40A9565CC70c3dA;
-        address payable user2 = 0xC54F7Bf6B56c46C53d624e1269a293AF0aEe57dd;
-        address payable user3 = 0x5d8D2f6fc8FDdF68e8961e027B2f3412cc21D751;
+        address payable user1 = 0xC6CB3865420875B759c1168cB12a12D1a994fcb5;
+        address payable user2 = 0x87acE434aa3e78E8E511F81aFbbB23bb8b3CB842;
+        address payable user3 = 0x20Dde2B1AA9776Ac7d48a9B37d87e3f84c85b54D;
 
         createUser(100, user1);
         createUser(50, user2);

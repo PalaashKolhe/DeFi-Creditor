@@ -4,7 +4,7 @@ import './App.css';
 import ExchangeContract from "./contracts/Exchange.json";
 import CreditContract from "./contracts/Credit.json";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LandingPage from "./components/LandingPage/LandingPage";
+import MainPage from './components/MainPage/MainPage';
 
 class App extends Component {
   constructor(props) {
@@ -71,7 +71,7 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <Routes>
-            <Route exact path="/" element={<LandingPage/>} />
+            <Route exact path="/" element={<MainPage creditArray={this.state.creditArray}/>} />
             {/* <Route path="/main" component={MainPage} exact/>
             <Route path="/auth" component={AuthPage} exact/>
             <Route path="/view_profile" component={ProfilePage} exact/>
