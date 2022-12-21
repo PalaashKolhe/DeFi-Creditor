@@ -1,5 +1,11 @@
 .modal {
-    padding: 20px 10px;
-    height: 20px;
-    box-shadow: 5px 5px 5px 5px #ccc;
+    padding: 20px 30px;
+    height: 55px;
+    box-shadow: 1px 1px 1px 1px #ccc;
+    margin-bottom: 20px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: bold;
 }

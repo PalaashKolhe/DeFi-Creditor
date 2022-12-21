@@ -1,4 +1,4 @@
-.landingPage {
+.landing-page {
     height: 100%;
     width: 100%;
 }
@@ -8,6 +8,9 @@
 }
 
 .credit p {
-    font-size: 16px;
-    
+    font-size: 16px;   
+}
+
+.modal-container {
+    margin-top: 35px;
 }
