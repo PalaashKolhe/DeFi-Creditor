@@ -18,26 +18,33 @@ export default class Credit extends Component {
 
     render() {
         return (
-            <div className="modal frbc">
-                <div className="fccs">
-                    <div className="modal-title">
-                        Address
+            <div className="frcc" style={{
+                "width": "100%", "margin-bottom": "20px",
+            }}>
+                <div className="modal frbc">
+                    <div className="fccs">
+                        <div className="modal-title">
+                            Address
+                        </div>
+                        <div>
+                            {this.props.borrower}
+                        </div>
                     </div>
-                    <div>
-                        {this.props.borrower}
-                    </div>
-                </div>
-                {/* <div className="fccc">
+                    {/* <div className="fccc">
                     <div>Description:</div>
                     <div>{this.props.descriptions}</div>                
                 </div> */}
-                <div className="fcce">
-                    <div className="modal-title">
-                        Amount
+                    <div className="fcce">
+                        <div className="modal-title">
+                            Amount
+                        </div>
+                        <div>
+                            {this.props.amount} ETH (${this.state.usdPrice})
+                        </div>
                     </div>
-                    <div>
-                        {this.props.amount} ETH (${this.state.usdPrice})
-                    </div>
+                </div>
+                <div className="fccs lend-button">
+                    Lend
                 </div>
             </div>
         )

@@ -2,10 +2,28 @@
     padding: 20px 30px;
     height: 55px;
     box-shadow: 1px 1px 1px 1px #ccc;
-    margin-bottom: 20px;
+    width: 90%;
+    margin-right: 10px;
 }
 
 .modal-title {
     font-size: 20px;
     font-weight: bold;
+}
+
+.lend-button {
+    width: 10%;
+    padding: 20px 30px;
+    align-items: center;
+    font-size: 20px;
+    box-shadow: 1px 1px 1px 1px #ccc;
+    height: 55px;
+    background-color: #eaf9fb;
+    font-weight: bold;
+}
+
+.lend-button:hover {
+    background-color: #ece7fd;
+    cursor: pointer;
+
 }
