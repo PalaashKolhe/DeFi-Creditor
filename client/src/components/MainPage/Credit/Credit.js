@@ -34,7 +34,8 @@ export default class Credit extends Component {
 
         this.props.exchange.setLenderForCredit(this.props.account, this.props.borrower)
             .catch((e) => { console.log("Error while creating credit: ", e) });
-
+        
+        // window.location.reload();
     }
 
     render() {
