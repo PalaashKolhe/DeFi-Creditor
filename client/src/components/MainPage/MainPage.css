@@ -14,3 +14,10 @@
 .modal-container {
     margin-top: 35px;
 }
+
+.currently-active-credits-paragraph {
+    text-align: left;
+    padding-top: 20px;
+    font-size: 21px;
+
+}

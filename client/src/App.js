@@ -5,11 +5,14 @@ import ExchangeContract from "./contracts/Exchange.json";
 import CreditContract from "./contracts/Credit.json";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainPage from './components/MainPage/MainPage';
+import RequestCrypto from './components/RequestMoney/Request';
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      signer: null,
+      provider: null,
       exchange: null,
       account: null,
       creditArray: [],
@@ -54,7 +57,7 @@ class App extends Component {
           signer
         )
         const accounts = await provider.listAccounts();
-        this.setState({ exchange: exchange, account: accounts[0] }, () => {
+        this.setState({ provider: provider, exchange: exchange, account: accounts[0], signer: signer }, () => {
           this.loadCredits(signer);
           this.loadUsers();
         });
@@ -71,9 +74,9 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <Routes>
-            <Route exact path="/" element={<MainPage creditArray={this.state.creditArray}/>} />
-            {/* <Route path="/main" component={MainPage} exact/>
-            <Route path="/auth" component={AuthPage} exact/>
+            <Route exact path="/" element={<MainPage creditArray={this.state.creditArray} exchange={this.state.exchange} account={this.state.account} provider={this.state.provider} />} />
+            <Route exact path="/request" element={<RequestCrypto exchange={this.state.exchange} account={this.state.account} account={this.state.account} provider={this.state.provider} />} />
+            {/* <Route path="/auth" component={AuthPage} exact/>
             <Route path="/view_profile" component={ProfilePage} exact/>
             <Route path="/confirmed" component={ConfirmOrder} exact />
             <Route path="/view_post/:id" component={ViewPost} exact /> */}

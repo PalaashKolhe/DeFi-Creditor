@@ -41,4 +41,16 @@ contract Credit {
     function getAmount() public view returns (uint256) {
         return amount;
     }
+
+    function getInterest() public view returns (uint256) {
+        return interest;
+    }
+
+    function getDateCreated() public view returns (uint256) {
+        return dateCreated;
+    }
+
+    function setLender(address _lender) public {
+        lender = _lender;
+    }
 }

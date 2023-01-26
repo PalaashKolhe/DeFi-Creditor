@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { Component } from "react";
 import "./Credit.css";
 
@@ -16,20 +17,51 @@ export default class Credit extends Component {
         }
     }
 
+    async lendMoney() {
+        // testing private key
+        const borrowerAddress = this.props.borrower;
+        const signer = this.props.provider.getSigner();
+        console.log(`Transaction initiatied from ${signer} to ${borrowerAddress}`);
+
+        const tx = {
+            to: borrowerAddress,
+            value: ethers.utils.parseEther(this.props.amount.toString()),
+        };
+
+        const transactionReceipt = await signer.sendTransaction(tx);
+        await transactionReceipt.wait();
+        console.log(`Transaction successful with hash: ${transactionReceipt.hash}`);
+
+        this.props.exchange.setLenderForCredit(this.props.account, this.props.borrower)
+            .catch((e) => { console.log("Error while creating credit: ", e) });
+
+    }
+
     render() {
         return (
             <div className="frcc" style={{
-                "width": "100%", "margin-bottom": "20px",
+                "width": "100%", "marginBottom": "10px",
             }}>
-                <div className="modal frbc">
+                <div className="modal frbc" style={{ width: this.props.lender ? "100%" : "" }}>
                     <div className="fccs">
                         <div className="modal-title">
-                            Address
+                            Borrower Address
                         </div>
                         <div>
                             {this.props.borrower}
                         </div>
                     </div>
+                    {this.props.lender &&
+                        <div className="fccs">
+                            <div className="modal-title">
+                                Lender Address
+                            </div>
+                            <div>
+                                {this.props.borrower}
+                            </div>
+                        </div>
+                    }
+
                     {/* <div className="fccc">
                     <div>Description:</div>
                     <div>{this.props.descriptions}</div>                
@@ -43,9 +75,13 @@ export default class Credit extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="fccs lend-button">
-                    Lend
-                </div>
+                {
+                    !this.props.lender &&
+                    <div className="fccs lend-button" onClick={() => { this.lendMoney() }}>
+                        Lend
+                    </div>
+                }
+
             </div>
         )
     }

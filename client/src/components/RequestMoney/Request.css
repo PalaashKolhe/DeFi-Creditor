@@ -1,0 +1,16 @@
+.landing-page {
+  height: 100%;
+  width: 100%;
+}
+
+
+.container {
+  padding: 20px 15%;
+
+}
+
+.request-title {
+  font-family: "Poppins";
+
+  font-size: 24px;
+}

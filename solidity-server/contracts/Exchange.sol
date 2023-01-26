@@ -19,14 +19,18 @@ contract Exchange {
     constructor() public {
         address payable user1 = 0xC6CB3865420875B759c1168cB12a12D1a994fcb5;
         address payable user2 = 0x87acE434aa3e78E8E511F81aFbbB23bb8b3CB842;
-        address payable user3 = 0x20Dde2B1AA9776Ac7d48a9B37d87e3f84c85b54D;
+        address payable user3 = 0xecefDab55cB0A51072385659339DDA31e4D68A33;
+        address payable user4 = 0x5Caf92ACD39FfF3965a3E1Dd3E7791895205aa00;
 
         createUser(100, user1);
         createUser(50, user2);
         createUser(75, user3);
+        createUser(100, user4);
 
-        createCredit(user1, user2, 20, 1, block.timestamp + 10000);
-        createCredit(user2, user3, 15, 2, block.timestamp + 20000);
+        createRequestCredit(user1, 1, 1, block.timestamp + 10000);
+        createRequestCredit(user2, 2, 2, block.timestamp + 20000);
+        createRequestCredit(user3, 13, 2, block.timestamp + 20000);
+        createRequestCredit(user4, 5, 2, block.timestamp + 20000);
     }
 
     event UserCreated(address _address, uint256 balance, bool hasCredit);
@@ -41,9 +45,16 @@ contract Exchange {
         uint256 dateCreated
     );
 
-    function removeFromCreditArr(uint index) internal {
+    event LendRequestCreated(
+        address borrower,
+        uint256 amount,
+        uint256 interest,
+        uint256 dateCreated
+    );
+
+    function removeFromCreditArr(uint256 index) internal {
         require(index < creditArray.length);
-        creditArray[index] = creditArray[creditArray.length-1];
+        creditArray[index] = creditArray[creditArray.length - 1];
         creditArray.pop();
     }
 
@@ -62,25 +73,84 @@ contract Exchange {
         emit UserCreated(msg.sender, _balance, false);
     }
 
-    function createCredit(
+    // function createCredit(
+    //     address borrower,
+    //     address lender,
+    //     uint256 amount,
+    //     uint256 interest,
+    //     uint256 repaymentDate
+    // ) public {
+    //     User memory borrowerUser = userMapping[borrower];
+    //     User memory lenderUser = userMapping[lender];
+
+    //     require(borrowerUser.hasCredit == false);
+    //     require(lenderUser.balance >= amount);
+
+    //     uint256 currentDate = block.timestamp;
+
+    //     Credit credit = new Credit();
+    //     credit.initializeCredit(
+    //         borrower,
+    //         lender,
+    //         amount,
+    //         interest,
+    //         currentDate,
+    //         repaymentDate
+    //     );
+    //     creditArray.push(credit);
+
+    //     emit CreditCreated(borrower, lender, amount, interest, currentDate);
+
+    //     transfer(borrower, lender, amount);
+    // }
+
+    function setLenderForCredit(
+        address payable lenderAddress,
+        address borrowerAddress
+    ) public {
+        bool found = false;
+        for (uint256 i = 0; i < userArray.length; i++) {
+            if (userArray[i]._address == lenderAddress) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            createUser(100, lenderAddress);
+        }
+
+        for (uint256 i = 0; i < creditArray.length; i++) {
+            Credit credit = creditArray[i];
+            if (credit.getBorrower() == borrowerAddress) {
+                credit.setLender(lenderAddress);
+                emit CreditCreated(
+                    borrowerAddress,
+                    lenderAddress,
+                    credit.getAmount(),
+                    credit.getInterest(),
+                    credit.getDateCreated()
+                );
+                break;
+            }
+        }
+    }
+
+    function createRequestCredit(
         address borrower,
-        address lender,
         uint256 amount,
         uint256 interest,
         uint256 repaymentDate
     ) public {
         User memory borrowerUser = userMapping[borrower];
-        User memory lenderUser = userMapping[lender];
 
         require(borrowerUser.hasCredit == false);
-        require(lenderUser.balance >= amount);
 
         uint256 currentDate = block.timestamp;
 
         Credit credit = new Credit();
         credit.initializeCredit(
             borrower,
-            lender,
+            address(0),
             amount,
             interest,
             currentDate,
@@ -88,9 +158,7 @@ contract Exchange {
         );
         creditArray.push(credit);
 
-        emit CreditCreated(borrower, lender, amount, interest, currentDate);
-
-        transfer(borrower, lender, amount);
+        emit LendRequestCreated(borrower, amount, interest, currentDate);
     }
 
     // needs to repay in full, no installments
@@ -102,13 +170,16 @@ contract Exchange {
 
         Credit credit;
         bool foundInCreditArray = false;
-        uint index = 0;
+        uint256 index = 0;
         Credit tempCredit;
         // uint arraySize = sizeof(creditArray) / sizeof(creditArray[0]);
 
-        for (uint i=0; i < creditArray.length; i++) {
+        for (uint256 i = 0; i < creditArray.length; i++) {
             tempCredit = creditArray[i];
-            if (tempCredit.getBorrower() == borrower && tempCredit.getLender() == lender) {
+            if (
+                tempCredit.getBorrower() == borrower &&
+                tempCredit.getLender() == lender
+            ) {
                 credit = creditArray[i];
                 foundInCreditArray = true;
                 index = i;
@@ -143,7 +214,7 @@ contract Exchange {
         emit LogTransfer(_sender, _receiver, amt);
     }
 
-    function getCreditArray() public view returns(Credit[] memory) {
+    function getCreditArray() public view returns (Credit[] memory) {
         return creditArray;
     }
 
