@@ -75,7 +75,7 @@ class App extends Component {
         <div className="App">
           <Routes>
             <Route exact path="/" element={<MainPage creditArray={this.state.creditArray} exchange={this.state.exchange} account={this.state.account} provider={this.state.provider} />} />
-            <Route exact path="/request" element={<RequestCrypto exchange={this.state.exchange} account={this.state.account} account={this.state.account} provider={this.state.provider} />} />
+            <Route exact path="/request" element={<RequestCrypto exchange={this.state.exchange} account={this.state.account} provider={this.state.provider} />} />
             {/* <Route path="/auth" component={AuthPage} exact/>
             <Route path="/view_profile" component={ProfilePage} exact/>
             <Route path="/confirmed" component={ConfirmOrder} exact />
